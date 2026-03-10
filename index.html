@@ -1,553 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAVEN</title>
-  <style>
-    :root {
-      --bg: #050505;
-      --bg-soft: #0b0b0b;
-      --text: #f5f5f5;
-      --text-soft: rgba(245,245,245,0.72);
-      --text-faint: rgba(245,245,245,0.52);
-      --border: rgba(255,255,255,0.1);
-    }
+<meta charset="UTF-8">
+<title>RAVEN</title>
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
+<style>
 
-    a { color: inherit; text-decoration: none; }
-    img { display: block; width: 100%; }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: "Helvetica Neue", Arial, sans-serif;
+}
 
-    .container {
-      width: min(1200px, calc(100% - 32px));
-      margin: 0 auto;
-    }
+body{
+background:#000;
+color:white;
+height:200vh;
+overflow-x:hidden;
+}
 
-    .announcement {
-      border-bottom: 1px solid var(--border);
-      background:
-        radial-gradient(circle at 15% 50%, rgba(255,255,255,0.08), transparent 28%),
-        radial-gradient(circle at 85% 40%, rgba(255,255,255,0.05), transparent 24%),
-        linear-gradient(90deg, #040404 0%, #0a0a0a 45%, #050505 100%);
-      text-align: center;
-      padding: 10px 16px;
-      font-size: 11px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
+/* background glow */
 
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(5,5,5,0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
+.glow{
+position:fixed;
+width:600px;
+height:600px;
+background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+filter:blur(80px);
+animation:pulse 6s infinite alternate;
+z-index:-1;
+}
 
-    .header-inner {
-      min-height: 76px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 24px;
-    }
+@keyframes pulse{
+0%{opacity:.2; transform:translate(-50%,-50%) scale(.9);}
+100%{opacity:.4; transform:translate(-50%,-50%) scale(1.1);}
+}
 
-    .logo {
-      font-size: 34px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+/* center content */
 
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 28px;
-      flex-wrap: wrap;
-    }
+.container{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
 
-    .nav a,
-    .meta-line span,
-    .kicker,
-    .eyebrow,
-    .micro {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
+.logo{
+font-size:48px;
+letter-spacing:12px;
+margin-bottom:30px;
+opacity:0;
+transform:translateY(20px);
+transition:1.2s;
+}
 
-    .nav a {
-      font-size: 12px;
-      color: var(--text-soft);
-    }
+.tagline{
+font-size:18px;
+letter-spacing:3px;
+opacity:.7;
+margin-bottom:40px;
+opacity:0;
+transform:translateY(20px);
+transition:1.2s;
+}
 
-    .nav a:hover { color: var(--text); }
+.timer{
+font-size:42px;
+letter-spacing:6px;
+margin-bottom:20px;
+opacity:0;
+transform:translateY(20px);
+transition:1.2s;
+}
 
-    .header-cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 140px;
-      padding: 12px 18px;
-      border: 1px solid var(--text);
-      background: var(--text);
-      color: #050505;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-    }
+.sub{
+font-size:14px;
+opacity:.5;
+letter-spacing:2px;
+opacity:0;
+transform:translateY(20px);
+transition:1.2s;
+}
 
-    .header-cta:hover {
-      background: transparent;
-      color: var(--text);
-    }
+/* scroll reveal */
 
-    .hero {
-      border-bottom: 1px solid var(--border);
-      padding: 56px 0;
-    }
+.show{
+opacity:1;
+transform:translateY(0);
+}
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 0.92fr;
-      gap: 48px;
-      align-items: center;
-    }
+/* grain texture */
 
-    .eyebrow {
-      margin: 0 0 16px;
-      font-size: 11px;
-      color: var(--text-faint);
-    }
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+opacity:.05;
+pointer-events:none;
+}
 
-    .title {
-      margin: 0;
-      font-size: clamp(52px, 8vw, 110px);
-      line-height: 0.94;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .subtitle {
-      max-width: 520px;
-      margin: 24px 0 0;
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text-soft);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 32px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 190px;
-      padding: 15px 24px;
-      border: 1px solid var(--text);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-    }
-
-    .btn-primary {
-      background: var(--text);
-      color: #050505;
-    }
-
-    .btn-primary:hover {
-      background: transparent;
-      color: var(--text);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border-color: var(--border);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--text);
-      background: #111;
-    }
-
-    .meta-line {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      margin-top: 28px;
-      font-size: 11px;
-      color: var(--text-faint);
-    }
-
-    .hero-image-wrap {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-      min-height: 560px;
-    }
-
-    .hero-image {
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.84;
-    }
-
-    .product-card {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(5,5,5,0.72);
-      backdrop-filter: blur(10px);
-    }
-
-    .product-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .product-name,
-    .product-price,
-    .card-heading {
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-
-    .product-name,
-    .product-price { font-size: 12px; }
-    .product-note {
-      margin: 10px 0 0;
-      font-size: 11px;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .section {
-      border-bottom: 1px solid var(--border);
-      padding: 56px 0;
-    }
-
-    .section-grid {
-      display: grid;
-      gap: 24px;
-      grid-template-columns: 0.95fr 1.05fr;
-      align-items: start;
-    }
-
-    .section-title {
-      margin: 12px 0 0;
-      font-size: clamp(30px, 4vw, 44px);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      line-height: 1.08;
-    }
-
-    .section-copy,
-    .card-copy {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--text-soft);
-    }
-
-    .cards {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 24px;
-    }
-
-    .card {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      padding: 22px;
-    }
-
-    .card-heading {
-      font-size: 11px;
-      color: var(--text-faint);
-    }
-
-    .gallery {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .gallery .wide { grid-column: span 2; }
-    .gallery-item {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-    }
-
-    .gallery-item img {
-      height: 280px;
-      object-fit: cover;
-      opacity: 0.82;
-    }
-
-    .triple {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .cta-box {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      padding: 32px;
-    }
-
-    .footer {
-      padding: 28px 0;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 22px;
-      flex-wrap: wrap;
-    }
-
-    .footer a,
-    .footer-copy {
-      font-size: 12px;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-
-    .footer a:hover { color: var(--text); }
-
-    @media (max-width: 900px) {
-      .header-inner,
-      .hero-grid,
-      .section-grid,
-      .triple,
-      .footer-grid,
-      .cta-box {
-        grid-template-columns: 1fr;
-      }
-
-      .header-inner,
-      .footer-grid,
-      .cta-box {
-        display: grid;
-      }
-
-      .nav,
-      .footer-links {
-        justify-content: flex-start;
-      }
-
-      .hero-image-wrap { min-height: 420px; }
-      .gallery,
-      .cards { grid-template-columns: 1fr; }
-      .gallery .wide { grid-column: span 1; }
-      .gallery-item img { height: 240px; }
-      .logo { font-size: 28px; }
-      .header-cta { width: 100%; }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="announcement"><span id="drop-age">Dropped today</span> · Free UK shipping</div>
 
-  <header class="header">
-    <div class="container header-inner">
-      <a href="#top" class="logo">RAVEN</a>
-      <nav class="nav">
-        <a href="#drop">Drop</a>
-        <a href="#details">Details</a>
-        <a href="#story">Story</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <a href="https://fallenravenclo.com/products/raven-fur-hood-jacket" class="header-cta">Shop</a>
-    </div>
-  </header>
+<div class="glow"></div>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <p class="eyebrow">First Drop</p>
-          <h1 class="title">Heavy outerwear for cold nights.</h1>
-          <p class="subtitle">Limited first release. Minimal structure. Controlled silhouette. Built to look expensive without trying too hard.</p>
+<div class="container">
 
-          <div class="actions">
-            <a class="btn btn-primary" href="https://fallenravenclo.com/products/raven-fur-hood-jacket">Shop the drop</a>
-            <a class="btn btn-secondary" href="#details">View details</a>
-          </div>
+<div class="logo reveal">RAVEN</div>
 
-          <div class="meta-line">
-            <span>Limited release</span>
-            <span>Free UK shipping</span>
-            <span>Worldwide available</span>
-          </div>
-        </div>
+<div class="tagline reveal">
+1 JACKET.<br>
+NO RESTOCK.
+</div>
 
-        <div class="hero-image-wrap">
-          <img class="hero-image" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1400&q=80" alt="Dark editorial fashion image" />
-          <div class="product-card">
-            <div class="product-top">
-              <p class="product-name">Raven Fur Hood Jacket</p>
-              <p class="product-price">£94.99</p>
-            </div>
-            <p class="product-note">Limited run</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="timer reveal" id="countdown">
+04:00:00
+</div>
 
-    <section class="section" id="drop">
-      <div class="container section-grid">
-        <div>
-          <p class="eyebrow">The piece</p>
-          <h2 class="section-title">Raven Fur Hood Jacket</h2>
-          <p class="section-copy">Structured outer layer with a heavier visual presence than typical fast-fashion jackets. The goal is simple: look sharp, feel substantial, and stay wearable.</p>
+<div class="sub reveal">
+LOCKED. RELEASING SOON.<br>
+STAY TUNED.
+</div>
 
-          <div class="cards">
-            <div class="card">
-              <p class="card-heading">Insulation</p>
-              <p class="card-copy">Appears lightweight, but built with proper insulation and layered diamond-shaped stitching throughout.</p>
-            </div>
-            <div class="card">
-              <p class="card-heading">Fit</p>
-              <p class="card-copy">Slightly cropped for cleaner proportions and to keep the belt visible as part of the full look.</p>
-            </div>
-            <div class="card">
-              <p class="card-heading">Finish</p>
-              <p class="card-copy">Controlled silhouette with a sharper overall shape than a standard winter jacket.</p>
-            </div>
-            <div class="card">
-              <p class="card-heading">Fur</p>
-              <p class="card-copy">Ethically sourced fur selected to keep the piece heavy in presence without feeling forced.</p>
-            </div>
-          </div>
-        </div>
+</div>
 
-        <div class="gallery">
-          <div class="gallery-item wide">
-            <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1400&q=80" alt="Dark fashion detail shot" />
-          </div>
-          <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80" alt="Streetwear silhouette" />
-          </div>
-          <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80" alt="Editorial outerwear close shot" />
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section" id="details">
-      <div class="container triple">
-        <div class="card">
-          <p class="card-heading">Clarity</p>
-          <p class="card-copy">One product. One dominant action. No clutter, no fake luxury language, no friction before checkout.</p>
-        </div>
-        <div class="card">
-          <p class="card-heading">Conversion</p>
-          <p class="card-copy">Every primary button sends people to your Shopify product page, where payments and orders already work.</p>
-        </div>
-        <div class="card">
-          <p class="card-heading">Control</p>
-          <p class="card-copy">This storefront handles the brand look. Shopify handles the transaction layer. That separation keeps things clean.</p>
-        </div>
-      </div>
-    </section>
+<script>
 
-    <section class="section" id="story">
-      <div class="container section-grid">
-        <div>
-          <p class="eyebrow">Story</p>
-          <h2 class="section-title">Build the brand without pretending you’re bigger than you are.</h2>
-        </div>
-        <div>
-          <p class="section-copy">Built for colder nights and cleaner proportions. Quiet from a distance, stronger up close.</p>
-          <p class="section-copy">The shape stays slightly cropped so the outfit keeps its structure. The finish stays controlled. Nothing loud for the sake of it.</p>
-          <p class="section-copy">Made for people who care how a piece sits, how it holds heat, and how it changes the whole silhouette without trying too hard.</p>
-        </div>
-      </div>
-    </section>
+/* 4 hour timer */
 
-    <section class="section">
-      <div class="container cta-box">
-        <div>
-          <p class="eyebrow">Now available</p>
-          <h2 class="section-title">A cold-weather piece with the right weight, shape, and finish.</h2>
-          <p class="section-copy">Limited first release. Free UK shipping. When it’s gone, it’s gone.</p>
-        </div>
-        <a class="btn btn-primary" href="https://fallenravenclo.com/products/raven-fur-hood-jacket">Buy now</a>
-      </div>
-    </section>
-  </main>
+let time = 4 * 60 * 60;
 
-  <footer class="footer" id="contact">
-    <div class="container footer-grid">
-      <div class="logo" style="font-size: 24px;">RAVEN</div>
-      <div class="footer-links">
-        <a href="#drop">Drop</a>
-        <a href="#story">Story</a>
-        <a href="mailto:contact@fallenravenclo.com">Contact</a>
-      </div>
-      <div class="footer-copy">contact@fallenravenclo.com</div>
-    </div>
-  </footer>
-  <script>
-    (function () {
-      const el = document.getElementById('drop-age');
-      if (!el) return;
+const countdown = document.getElementById("countdown");
 
-      const dropDate = new Date('2026-03-10T00:00:00');
-      const now = new Date();
-      const msPerDay = 24 * 60 * 60 * 1000;
-      const diffDays = Math.floor((now - dropDate) / msPerDay);
+function updateTimer(){
 
-      if (diffDays <= 0) {
-        el.textContent = 'Dropped today';
-      } else if (diffDays === 1) {
-        el.textContent = 'Dropped 1 day ago';
-      } else {
-        el.textContent = `Dropped ${diffDays} days ago`;
-      }
-    })();
-  </script>
+let hours = Math.floor(time / 3600);
+let minutes = Math.floor((time % 3600) / 60);
+let seconds = time % 60;
+
+countdown.innerHTML =
+String(hours).padStart(2,'0') + ":" +
+String(minutes).padStart(2,'0') + ":" +
+String(seconds).padStart(2,'0');
+
+time--;
+
+if(time < 0){
+countdown.innerHTML = "UNLOCKED";
+}
+
+}
+
+setInterval(updateTimer,1000);
+
+
+/* scroll reveal */
+
+const reveals = document.querySelectorAll(".reveal");
+
+function reveal(){
+
+reveals.forEach(el=>{
+let windowHeight = window.innerHeight;
+let top = el.getBoundingClientRect().top;
+
+if(top < windowHeight - 60){
+el.classList.add("show");
+}
+
+})
+
+}
+
+window.addEventListener("scroll", reveal);
+window.addEventListener("load", reveal);
+
+</script>
+
 </body>
 </html>
