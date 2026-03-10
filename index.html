@@ -52,6 +52,10 @@
       width:100%;
     }
 
+    button{
+      font-family:inherit;
+    }
+
     .container{
       width:min(1280px,calc(100% - 32px));
       margin:0 auto;
@@ -165,6 +169,9 @@
       border:1px solid var(--border-strong);
       overflow:hidden;
       transition:.25s;
+      cursor:pointer;
+      background:transparent;
+      color:var(--text);
     }
 
     .btn::before,
@@ -192,11 +199,6 @@
     .btn:hover::after,
     .header-cta:hover::after{
       transform:translateX(100%);
-    }
-
-    .header-cta{
-      background:transparent;
-      color:var(--text);
     }
 
     .header-cta:hover{
@@ -265,6 +267,14 @@
     .btn-secondary:hover{
       border-color:var(--text);
       background:#101010;
+    }
+
+    .secure-note{
+      margin:14px 0 0;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(245,245,245,0.5);
     }
 
     .meta-line{
@@ -613,6 +623,17 @@
       border:1px solid rgba(255,255,255,0.08);
     }
 
+    .shopify-buy-hidden{
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      pointer-events:none;
+      opacity:0;
+    }
+
     @media (max-width:900px){
       .header-inner,
       .hero-grid,
@@ -692,7 +713,7 @@
   </style>
 </head>
 <body>
-  <div class="announcement">drop 001 · free UK shipping</div>
+  <div class="announcement">drop 001 · free shipping internationally</div>
 
   <header class="header">
     <div class="container header-inner">
@@ -704,7 +725,7 @@
         <a href="#contact">Shop</a>
       </nav>
 
-      <a href="https://fallenravenclo.com/products/raven-fur-hood-jacket" class="header-cta">Enter</a>
+      <button class="header-cta shopify-trigger" type="button">Enter</button>
     </div>
   </header>
 
@@ -717,13 +738,15 @@
           <p class="subtitle">limited first release. structured shape, darker finish, clean silhouette.</p>
 
           <div class="actions">
-            <a class="btn btn-primary" href="https://fallenravenclo.com/products/raven-fur-hood-jacket">Shop the drop</a>
+            <button class="btn btn-primary shopify-trigger" type="button">Shop the drop</button>
             <a class="btn btn-secondary" href="#drop">View details</a>
           </div>
 
+          <p class="secure-note">secure checkout via shopify</p>
+
           <div class="meta-line">
             <span>Limited release</span>
-            <span>Free UK shipping</span>
+            <span>Free shipping internationally</span>
             <span>Worldwide available</span>
           </div>
         </div>
@@ -802,9 +825,9 @@
         <div>
           <p class="eyebrow">now live</p>
           <h2 class="section-title">the last jacket you’ll need.</h2>
-          <p class="section-copy">limited first release. free UK shipping. once it’s gone, it’s gone.</p>
+          <p class="section-copy">limited first release. free shipping internationally. once it’s gone, it’s gone.</p>
         </div>
-        <a class="btn btn-primary" href="https://fallenravenclo.com/products/raven-fur-hood-jacket">Buy now</a>
+        <button class="btn btn-primary shopify-trigger" type="button">Buy now</button>
       </div>
     </section>
   </main>
@@ -827,6 +850,10 @@
       <button class="lightbox-next" id="lightboxNext" aria-label="Next">→</button>
       <div class="lightbox-caption" id="lightboxCaption">image 1 / 4</div>
     </div>
+  </div>
+
+  <div class="shopify-buy-hidden">
+    <div id="product-component-1773180493377"></div>
   </div>
 
   <script>
@@ -899,6 +926,210 @@
       if(e.key === "ArrowRight") showNext();
       if(e.key === "ArrowLeft") showPrev();
     });
+  </script>
+
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  (function () {
+    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+      } else {
+        loadScript();
+      }
+    } else {
+      loadScript();
+    }
+
+    function loadScript() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = scriptURL;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+      script.onload = ShopifyBuyInit;
+    }
+
+    function ShopifyBuyInit() {
+      var client = ShopifyBuy.buildClient({
+        domain: 'jr9ciq-0d.myshopify.com',
+        storefrontAccessToken: '1ad924b0fff6d0b466a4d145b8f81bec',
+      });
+
+      ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: '15399858962809',
+          node: document.getElementById('product-component-1773180493377'),
+          moneyFormat: '%C2%A3%7B%7Bamount%7D%7D',
+          options: {
+            product: {
+              iframe: false,
+              contents: {
+                img: false,
+                imgWithCarousel: false,
+                title: false,
+                price: false,
+                description: false,
+                button: true,
+                buttonWithQuantity: false,
+                quantity: false
+              },
+              styles: {
+                product: {
+                  width: '1px',
+                  'max-width': '1px',
+                  margin: '0',
+                  padding: '0'
+                },
+                button: {
+                  'font-size': '1px',
+                  'padding-top': '1px',
+                  'padding-bottom': '1px',
+                  'padding-left': '1px',
+                  'padding-right': '1px',
+                  'min-width': '1px',
+                  color: '#000000',
+                  'background-color': '#000000',
+                  ':hover': {
+                    color: '#000000',
+                    'background-color': '#000000'
+                  },
+                  ':focus': {
+                    'background-color': '#000000'
+                  },
+                  'border-radius': '0'
+                }
+              },
+              buttonDestination: 'checkout',
+              text: {
+                button: 'Buy now'
+              }
+            },
+            productSet: {
+              styles: {
+                products: {
+                  margin: '0'
+                }
+              }
+            },
+            modalProduct: {
+              contents: {
+                img: false,
+                imgWithCarousel: true,
+                button: false,
+                buttonWithQuantity: true
+              },
+              styles: {
+                product: {
+                  '@media (min-width: 601px)': {
+                    'max-width': '100%',
+                    'margin-left': '0px',
+                    'margin-bottom': '0px'
+                  }
+                },
+                button: {
+                  'font-family': 'Droid Sans, sans-serif',
+                  'font-weight': 'bold',
+                  'font-size': '14px',
+                  'padding-top': '15px',
+                  'padding-bottom': '15px',
+                  color: '#f9f7f7',
+                  ':hover': {
+                    color: '#f9f7f7',
+                    'background-color': '#000000'
+                  },
+                  'background-color': '#000000',
+                  ':focus': {
+                    'background-color': '#000000'
+                  },
+                  'border-radius': '4px',
+                  'padding-left': '69px',
+                  'padding-right': '69px'
+                },
+                quantityInput: {
+                  'font-size': '14px',
+                  'padding-top': '15px',
+                  'padding-bottom': '15px'
+                }
+              },
+              googleFonts: ['Droid Sans'],
+              text: {
+                button: 'Add to cart'
+              }
+            },
+            option: {},
+            cart: {
+              styles: {
+                button: {
+                  'font-family': 'Droid Sans, sans-serif',
+                  'font-weight': 'bold',
+                  'font-size': '14px',
+                  'padding-top': '15px',
+                  'padding-bottom': '15px',
+                  color: '#f9f7f7',
+                  ':hover': {
+                    color: '#f9f7f7',
+                    'background-color': '#000000'
+                  },
+                  'background-color': '#000000',
+                  ':focus': {
+                    'background-color': '#000000'
+                  },
+                  'border-radius': '4px'
+                }
+              },
+              text: {
+                total: 'Subtotal',
+                button: 'Checkout'
+              },
+              googleFonts: ['Droid Sans']
+            },
+            toggle: {
+              styles: {
+                toggle: {
+                  'font-family': 'Droid Sans, sans-serif',
+                  'font-weight': 'bold',
+                  'background-color': '#000000',
+                  ':hover': {
+                    'background-color': '#000000'
+                  },
+                  ':focus': {
+                    'background-color': '#000000'
+                  }
+                },
+                count: {
+                  'font-size': '14px',
+                  color: '#f9f7f7',
+                  ':hover': {
+                    color: '#f9f7f7'
+                  }
+                },
+                iconPath: {
+                  fill: '#f9f7f7'
+                }
+              },
+              googleFonts: ['Droid Sans']
+            }
+          }
+        });
+
+        setTimeout(function () {
+          var triggers = document.querySelectorAll('.shopify-trigger');
+
+          triggers.forEach(function(trigger) {
+            trigger.addEventListener('click', function() {
+              var shopifyButton = document.querySelector('#product-component-1773180493377 button');
+              if (shopifyButton) {
+                shopifyButton.click();
+              }
+            });
+          });
+        }, 1200);
+      });
+    }
+  })();
+  /*]]>*/
   </script>
 </body>
 </html>
