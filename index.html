@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RAVEN</title>
+<title>FALLENRAVEN™</title>
 
 <style>
 
@@ -10,92 +10,150 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family: "Helvetica Neue", Arial, sans-serif;
+font-family:Helvetica,Arial,sans-serif;
 }
 
 body{
 background:#000;
 color:white;
-height:200vh;
 overflow-x:hidden;
 }
 
-/* background glow */
+/* cursor glow */
 
-.glow{
+.cursor-glow{
 position:fixed;
-width:600px;
-height:600px;
+width:500px;
+height:500px;
 background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);
-top:50%;
-left:50%;
+pointer-events:none;
 transform:translate(-50%,-50%);
 filter:blur(80px);
-animation:pulse 6s infinite alternate;
 z-index:-1;
 }
 
-@keyframes pulse{
-0%{opacity:.2; transform:translate(-50%,-50%) scale(.9);}
-100%{opacity:.4; transform:translate(-50%,-50%) scale(1.1);}
+/* parallax background */
+
+.parallax{
+position:fixed;
+width:120%;
+height:120%;
+background:radial-gradient(circle at center,#111 0%,#000 60%);
+top:-10%;
+left:-10%;
+z-index:-2;
 }
 
-/* center content */
+/* container */
 
-.container{
-height:100vh;
+.section{
+min-height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
+padding:40px;
 }
+
+/* brand */
 
 .logo{
 font-size:48px;
 letter-spacing:12px;
 margin-bottom:30px;
-opacity:0;
-transform:translateY(20px);
-transition:1.2s;
 }
 
-.tagline{
-font-size:18px;
-letter-spacing:3px;
-opacity:.7;
-margin-bottom:40px;
-opacity:0;
-transform:translateY(20px);
-transition:1.2s;
+/* glitch effect */
+
+.glitch{
+position:relative;
+font-size:20px;
+letter-spacing:4px;
+opacity:.8;
 }
+
+.glitch::before,
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+left:0;
+width:100%;
+overflow:hidden;
+}
+
+.glitch::before{
+animation:glitch1 2s infinite linear alternate-reverse;
+color:#aaa;
+}
+
+.glitch::after{
+animation:glitch2 2s infinite linear alternate-reverse;
+color:#555;
+}
+
+@keyframes glitch1{
+0%{clip-path:inset(0 0 80% 0);}
+100%{clip-path:inset(60% 0 0 0);}
+}
+
+@keyframes glitch2{
+0%{clip-path:inset(40% 0 40% 0);}
+100%{clip-path:inset(10% 0 70% 0);}
+}
+
+/* timer */
 
 .timer{
-font-size:42px;
+font-size:44px;
 letter-spacing:6px;
-margin-bottom:20px;
-opacity:0;
-transform:translateY(20px);
-transition:1.2s;
+margin-top:40px;
 }
 
-.sub{
-font-size:14px;
-opacity:.5;
-letter-spacing:2px;
-opacity:0;
-transform:translateY(20px);
-transition:1.2s;
+/* email capture */
+
+.email-box{
+margin-top:40px;
+display:flex;
+gap:10px;
 }
 
-/* scroll reveal */
+.email-box input{
+background:#111;
+border:1px solid #333;
+padding:10px 15px;
+color:white;
+outline:none;
+}
 
-.show{
+.email-box button{
+background:white;
+color:black;
+border:none;
+padding:10px 18px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* silhouette */
+
+.silhouette{
+width:260px;
+height:360px;
+background:linear-gradient(180deg,#222,#000);
+margin-top:120px;
+filter:blur(8px);
+opacity:.4;
+transition:1.5s;
+}
+
+.silhouette.reveal{
+filter:blur(0);
 opacity:1;
-transform:translateY(0);
+transform:scale(1.05);
 }
 
-/* grain texture */
+/* grain */
 
 body::after{
 content:"";
@@ -114,79 +172,102 @@ pointer-events:none;
 
 <body>
 
-<div class="glow"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="parallax" id="parallax"></div>
 
-<div class="container">
+<section class="section">
 
-<div class="logo reveal">RAVEN</div>
+<div class="logo">FALLENRAVEN™</div>
 
-<div class="tagline reveal">
-1 JACKET.<br>
-NO RESTOCK.
+<div class="glitch" data-text="1 JACKET. NO RESTOCK.">
+1 JACKET. NO RESTOCK.
 </div>
 
-<div class="timer reveal" id="countdown">
-04:00:00
+<div class="timer" id="countdown">
+LOADING
 </div>
 
-<div class="sub reveal">
-LOCKED. RELEASING SOON.<br>
-STAY TUNED.
+<div class="email-box">
+<input placeholder="enter email">
+<button>notify</button>
 </div>
 
+</section>
+
+<section class="section">
+
+<div class="glitch" data-text="THE FIRST DROP">
+THE FIRST DROP
 </div>
+
+<div class="silhouette" id="silhouette"></div>
+
+<p style="opacity:.6;margin-top:20px;letter-spacing:3px">
+LOCKED. RELEASING SOON.
+</p>
+
+</section>
 
 
 <script>
 
-/* 4 hour timer */
+/* GLOBAL DROP TIME */
 
-let time = 4 * 60 * 60;
-
+const dropDate = new Date("2026-03-10T22:00:00Z").getTime();
 const countdown = document.getElementById("countdown");
 
 function updateTimer(){
 
-let hours = Math.floor(time / 3600);
-let minutes = Math.floor((time % 3600) / 60);
-let seconds = time % 60;
+const now = new Date().getTime();
+const distance = dropDate - now;
+
+if(distance <= 0){
+countdown.innerHTML = "UNLOCKED";
+return;
+}
+
+const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const m = Math.floor((distance%(1000*60*60))/(1000*60));
+const s = Math.floor((distance%(1000*60))/1000);
 
 countdown.innerHTML =
-String(hours).padStart(2,'0') + ":" +
-String(minutes).padStart(2,'0') + ":" +
-String(seconds).padStart(2,'0');
-
-time--;
-
-if(time < 0){
-countdown.innerHTML = "UNLOCKED";
-}
+String(h).padStart(2,"0")+":"+
+String(m).padStart(2,"0")+":"+
+String(s).padStart(2,"0");
 
 }
 
 setInterval(updateTimer,1000);
+updateTimer();
 
+/* cursor glow */
 
-/* scroll reveal */
+const glow = document.getElementById("cursorGlow");
 
-const reveals = document.querySelectorAll(".reveal");
+document.addEventListener("mousemove", e=>{
+glow.style.left = e.clientX+"px";
+glow.style.top = e.clientY+"px";
+});
 
-function reveal(){
+/* parallax */
 
-reveals.forEach(el=>{
-let windowHeight = window.innerHeight;
-let top = el.getBoundingClientRect().top;
+const parallax = document.getElementById("parallax");
 
-if(top < windowHeight - 60){
-el.classList.add("show");
+window.addEventListener("scroll", ()=>{
+const scroll = window.scrollY;
+parallax.style.transform = "translateY("+scroll*0.2+"px)";
+});
+
+/* silhouette reveal */
+
+const silhouette = document.getElementById("silhouette");
+
+window.addEventListener("scroll", ()=>{
+const pos = silhouette.getBoundingClientRect().top;
+if(pos < window.innerHeight - 100){
+silhouette.classList.add("reveal");
 }
-
-})
-
-}
-
-window.addEventListener("scroll", reveal);
-window.addEventListener("load", reveal);
+});
 
 </script>
 
