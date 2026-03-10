@@ -19,32 +19,40 @@ color:white;
 overflow-x:hidden;
 }
 
-/* cursor glow */
+/* JACKET BACKGROUND */
+
+.jacket-bg{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:900px;
+opacity:.08;
+filter:contrast(120%) brightness(120%);
+z-index:-2;
+pointer-events:none;
+}
+
+/* PARALLAX */
+
+body{
+perspective:1px;
+}
+
+/* CURSOR GLOW */
 
 .cursor-glow{
 position:fixed;
 width:500px;
 height:500px;
-background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);
+background:radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%);
 pointer-events:none;
 transform:translate(-50%,-50%);
 filter:blur(80px);
 z-index:-1;
 }
 
-/* parallax background */
-
-.parallax{
-position:fixed;
-width:120%;
-height:120%;
-background:radial-gradient(circle at center,#111 0%,#000 60%);
-top:-10%;
-left:-10%;
-z-index:-2;
-}
-
-/* container */
+/* PAGE */
 
 .section{
 min-height:100vh;
@@ -56,21 +64,21 @@ text-align:center;
 padding:40px;
 }
 
-/* brand */
+/* LOGO */
 
 .logo{
-font-size:48px;
-letter-spacing:12px;
+font-size:52px;
+letter-spacing:14px;
 margin-bottom:30px;
 }
 
-/* glitch effect */
+/* GLITCH TEXT */
 
 .glitch{
 position:relative;
 font-size:20px;
 letter-spacing:4px;
-opacity:.8;
+opacity:.85;
 }
 
 .glitch::before,
@@ -84,12 +92,12 @@ overflow:hidden;
 
 .glitch::before{
 animation:glitch1 2s infinite linear alternate-reverse;
-color:#aaa;
+color:#888;
 }
 
 .glitch::after{
 animation:glitch2 2s infinite linear alternate-reverse;
-color:#555;
+color:#444;
 }
 
 @keyframes glitch1{
@@ -102,15 +110,15 @@ color:#555;
 100%{clip-path:inset(10% 0 70% 0);}
 }
 
-/* timer */
+/* TIMER */
 
 .timer{
-font-size:44px;
+font-size:48px;
 letter-spacing:6px;
 margin-top:40px;
 }
 
-/* email capture */
+/* EMAIL */
 
 .email-box{
 margin-top:40px;
@@ -121,7 +129,7 @@ gap:10px;
 .email-box input{
 background:#111;
 border:1px solid #333;
-padding:10px 15px;
+padding:12px 16px;
 color:white;
 outline:none;
 }
@@ -130,30 +138,17 @@ outline:none;
 background:white;
 color:black;
 border:none;
-padding:10px 18px;
+padding:12px 20px;
 cursor:pointer;
 font-weight:bold;
+transition:.3s;
 }
 
-/* silhouette */
-
-.silhouette{
-width:260px;
-height:360px;
-background:linear-gradient(180deg,#222,#000);
-margin-top:120px;
-filter:blur(8px);
-opacity:.4;
-transition:1.5s;
+.email-box button:hover{
+background:#ddd;
 }
 
-.silhouette.reveal{
-filter:blur(0);
-opacity:1;
-transform:scale(1.05);
-}
-
-/* grain */
+/* GRAIN */
 
 body::after{
 content:"";
@@ -172,42 +167,39 @@ pointer-events:none;
 
 <body>
 
+<img src="jacket.png" class="jacket-bg">
+
 <div class="cursor-glow" id="cursorGlow"></div>
-<div class="parallax" id="parallax"></div>
 
 <section class="section">
 
 <div class="logo">FALLENRAVEN™</div>
 
-<div class="glitch" data-text="1 JACKET. NO RESTOCK.">
-1 JACKET. NO RESTOCK.
+<div class="glitch" data-text="FIRST DROP">
+FIRST DROP
 </div>
 
 <div class="timer" id="countdown">
 LOADING
 </div>
 
-<div class="email-box">
-<input placeholder="enter email">
-<button>notify</button>
-</div>
+<form class="email-box"
+action="https://formspree.io/f/YOURID"
+method="POST">
+
+<input
+type="email"
+name="email"
+placeholder="enter email"
+required>
+
+<button type="submit">
+notify
+</button>
+
+</form>
 
 </section>
-
-<section class="section">
-
-<div class="glitch" data-text="THE FIRST DROP">
-THE FIRST DROP
-</div>
-
-<div class="silhouette" id="silhouette"></div>
-
-<p style="opacity:.6;margin-top:20px;letter-spacing:3px">
-LOCKED. RELEASING SOON.
-</p>
-
-</section>
-
 
 <script>
 
@@ -240,33 +232,13 @@ String(s).padStart(2,"0");
 setInterval(updateTimer,1000);
 updateTimer();
 
-/* cursor glow */
+/* CURSOR GLOW */
 
 const glow = document.getElementById("cursorGlow");
 
 document.addEventListener("mousemove", e=>{
 glow.style.left = e.clientX+"px";
 glow.style.top = e.clientY+"px";
-});
-
-/* parallax */
-
-const parallax = document.getElementById("parallax");
-
-window.addEventListener("scroll", ()=>{
-const scroll = window.scrollY;
-parallax.style.transform = "translateY("+scroll*0.2+"px)";
-});
-
-/* silhouette reveal */
-
-const silhouette = document.getElementById("silhouette");
-
-window.addEventListener("scroll", ()=>{
-const pos = silhouette.getBoundingClientRect().top;
-if(pos < window.innerHeight - 100){
-silhouette.classList.add("reveal");
-}
 });
 
 </script>
