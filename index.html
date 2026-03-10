@@ -387,7 +387,7 @@
   </style>
 </head>
 <body>
-  <div class="announcement">Dropped today · Free UK shipping</div>
+  <div class="announcement"><span id="drop-age">Dropped today</span> · Free UK shipping</div>
 
   <header class="header">
     <div class="container header-inner">
@@ -444,20 +444,20 @@
 
           <div class="cards">
             <div class="card">
+              <p class="card-heading">Insulation</p>
+              <p class="card-copy">Appears lightweight, but built with proper insulation and layered diamond-shaped stitching throughout.</p>
+            </div>
+            <div class="card">
               <p class="card-heading">Fit</p>
-              <p class="card-copy">Relaxed silhouette built for layering. Cleaner shape zipped, more attitude open.</p>
+              <p class="card-copy">Slightly cropped for cleaner proportions and to keep the belt visible as part of the full look.</p>
             </div>
             <div class="card">
-              <p class="card-heading">Feel</p>
-              <p class="card-copy">Designed to feel weightier and more intentional than a basic seasonal jacket.</p>
+              <p class="card-heading">Finish</p>
+              <p class="card-copy">Controlled silhouette with a sharper overall shape than a standard winter jacket.</p>
             </div>
             <div class="card">
-              <p class="card-heading">Delivery</p>
-              <p class="card-copy">Free UK shipping. International shipping is handled through Shopify checkout.</p>
-            </div>
-            <div class="card">
-              <p class="card-heading">Drop logic</p>
-              <p class="card-copy">No fake complexity. Release the product, test demand, move with evidence.</p>
+              <p class="card-heading">Fur</p>
+              <p class="card-copy">Ethically sourced fur selected to keep the piece heavy in presence without feeling forced.</p>
             </div>
           </div>
         </div>
@@ -500,9 +500,9 @@
           <h2 class="section-title">Build the brand without pretending you’re bigger than you are.</h2>
         </div>
         <div>
-          <p class="section-copy">The mistake small brands make is trying to look established before they’ve earned attention. That creates fake complexity and weakens trust.</p>
-          <p class="section-copy">This storefront keeps the surface controlled while Shopify handles checkout, payments, order status, and shipping rules.</p>
-          <p class="section-copy">Your real leverage is not website tricks. It is product taste, sharp visuals, and content that makes people care enough to click through.</p>
+          <p class="section-copy">Built for colder nights and cleaner proportions. Quiet from a distance, stronger up close.</p>
+          <p class="section-copy">The shape stays slightly cropped so the outfit keeps its structure. The finish stays controlled. Nothing loud for the sake of it.</p>
+          <p class="section-copy">Made for people who care how a piece sits, how it holds heat, and how it changes the whole silhouette without trying too hard.</p>
         </div>
       </div>
     </section>
@@ -510,9 +510,9 @@
     <section class="section">
       <div class="container cta-box">
         <div>
-          <p class="eyebrow">Final step</p>
-          <h2 class="section-title">Ready to send traffic somewhere that actually looks like a brand.</h2>
-          <p class="section-copy">Use this as the storefront. Use Shopify purely as the transaction layer. Keep the journey simple.</p>
+          <p class="eyebrow">Now available</p>
+          <h2 class="section-title">A cold-weather piece with the right weight, shape, and finish.</h2>
+          <p class="section-copy">Limited first release. Free UK shipping. When it’s gone, it’s gone.</p>
         </div>
         <a class="btn btn-primary" href="https://fallenravenclo.com/products/raven-fur-hood-jacket">Buy now</a>
       </div>
@@ -530,5 +530,24 @@
       <div class="footer-copy">contact@fallenravenclo.com</div>
     </div>
   </footer>
+  <script>
+    (function () {
+      const el = document.getElementById('drop-age');
+      if (!el) return;
+
+      const dropDate = new Date('2026-03-10T00:00:00');
+      const now = new Date();
+      const msPerDay = 24 * 60 * 60 * 1000;
+      const diffDays = Math.floor((now - dropDate) / msPerDay);
+
+      if (diffDays <= 0) {
+        el.textContent = 'Dropped today';
+      } else if (diffDays === 1) {
+        el.textContent = 'Dropped 1 day ago';
+      } else {
+        el.textContent = `Dropped ${diffDays} days ago`;
+      }
+    })();
+  </script>
 </body>
 </html>
